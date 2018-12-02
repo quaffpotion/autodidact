@@ -20,7 +20,7 @@ def backward_pass(g, end_node):
         outgrad = outgrads.pop(node)
         fun, value, args, kwargs, argnums = node.recipe
         for argnum, parent in zip(argnums, node.parents):
-            vjp = primitive_vjps[fun][argnum]
+            vjp = primitive_vjps[fun].get(argnum)
             parent_grad = vjp(outgrad, value, *args, **kwargs)
             outgrads[parent] = add_outgrads(outgrads.get(parent), parent_grad)
     return outgrad
